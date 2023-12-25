@@ -60,6 +60,7 @@ public class Game {
                 System.out.println("Guess must be " + wordLength +" letters");
                 guess = inputScanner.nextLine().trim().toLowerCase();
             }
+            //###TODOS###
             //call check method to compare guess to answer
             //loop answer once to find greens, remove greens from answer
             //then loop again to find yellows
