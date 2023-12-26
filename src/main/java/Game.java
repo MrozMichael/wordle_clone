@@ -4,9 +4,15 @@ import java.io.File;
 import java.lang.reflect.Array;
 import java.util.*;
 public class Game {
+    //TO DO: fix minor logic error where yellow shows up multiple times.
+    // ^ex: guessing abaaa for answer xaxxx will result in !*!!!, should be !****
+    //first thought: while doing 2nd loop in check:
+    // ^mark first instance of ! then turn that letter into * in the answer arr so subsequent checks dont give !
     private int wordLength;
     private String answer;
     private int lives;
+
+    private int startingLives;
 
     private String currentGuess;
     private ArrayList<String> guesses;
@@ -17,7 +23,8 @@ public class Game {
             return;
         }
         this.wordLength = wordLength;
-        this.lives = 5;
+        this.lives = wordLength;
+        this.startingLives = wordLength;
         this.guesses = new ArrayList<>();
         this.inputScanner = new Scanner(System.in);
         try {
@@ -49,14 +56,14 @@ public class Game {
 
     public void play(){
         while(lives > 0) {
-            for(String guess: guesses){
+            for(String guess: this.guesses){
                 System.out.println(guess);
             }
             String guessRemaining = this.lives == 1 ? "guess remaining" : "guesses remaining";
             System.out.println("Guess a word ("+lives+" "+guessRemaining+"):");
             String guess = inputScanner.nextLine().trim().toLowerCase();
             while(guess.length() != wordLength || guess.contains(" ") || guess.contains("!") || guess.contains("_")){
-                System.out.println("Guess must be " + wordLength +" letters");
+                System.out.println("Guess must be " + wordLength +" letters without spaces");
                 guess = inputScanner.nextLine().trim().toLowerCase();
             }
             check(guess);
@@ -64,18 +71,16 @@ public class Game {
                 end();
                 return;
             }
-            //###TODOS##
-
             lives--;
         }
         System.out.println("Game over! The correct answer was: " + answer);
     }
 
     public void check(String guess){
-        this.guesses.add(guess);
-        System.out.println("Answer is : " + this.answer);
+        startGuess(guess);
+        System.out.println("Answer is : " + this.answer); //debugging
         this.currentGuess = "";
-        String answerCopy = ""; //copy answer but replace correct guesses with _
+        String answerCopy = ""; //copy answer but replace correct letters with _
         String[] guessArr = guess.split("");
         String[] answerArr = this.answer.split("");
         for (int i = 0; i < answerArr.length; i++){
@@ -85,7 +90,7 @@ public class Game {
         }
         String[] currentGuessArr = this.currentGuess.split("");
 
-        //if answerArr[i].equals(_), leave guess as is
+        //if answerArr[i].equals(_), leave guess[i] as is
         //else, change the letter in guess to either ! for yellow or * for red
         for (int i = 0; i < answerArr.length; i++){
             if (answerCopy.split("")[i].equals("_")){
@@ -94,12 +99,23 @@ public class Game {
             currentGuessArr[i] = answerCopy.contains(currentGuessArr[i]) ? "!" : "*";
         }
         currentGuess = String.join("", currentGuessArr);
-        guesses.add(currentGuess);
-
+        finishGuess(currentGuess);
     }
 
     public boolean gameOver(){
         return this.currentGuess.equals(this.answer);
+    }
+
+    public void startGuess(String guess){
+        int guessNumber = this.startingLives + 1 - this.lives;
+        this.guesses.add("=========== Guess " + guessNumber + "===========");
+        this.guesses.add("Your guess: " + guess);
+    }
+
+    public void finishGuess(String guess){
+        this.guesses.add("Guess Result: " + guess);
+        this.guesses.add("! means the letter is in a different spot\n* means the letter isn't in the answer");
+        this.guesses.add("===============================");
     }
 
     public void end(){
@@ -108,16 +124,26 @@ public class Game {
     }
 
     public void startMessage(){
-        System.out.println("Welcome to Wordle_Clone! Here's how it works:\n" +
-                "You have " + lives +" guesses to guess the word.\n" +
+        System.out.println("\n*** Welcome to my Wordle Clone! ***\nHere's how it works:\n" +
+                "You have " + lives +" guesses to guess the word\n" +
                 "If your guess has the right letter in the right spot, the letter will appear in that spot\n" +
-                "if your guess has the right letter in the wrong spot, the letter will become a '!'\n" +
-                "if your guess has a letter that isn't in the answer at all, the letter will become a '*'\n" +
+                "If your guess has the right letter in the wrong spot, the letter will become a '!'\n" +
+                "If your guess has a letter that isn't in the answer at all, the letter will become a '*'\n" +
                 "Good luck! :)\n");
     }
 
     public static void main(String[] args){
-        Game game = new Game(5);
+        System.out.println("Welcome to wordle_clone, please enter 5, 6, or 7 to decide how many letters " +
+                "you want your word to have. An invalid input will default to a 5 letter word");
+        Scanner wordLenScan = new Scanner(System.in);
+        String input = wordLenScan.nextLine();
+        int wordLen = 5;
+        try{
+           wordLen = Integer.valueOf(input);
+            } catch (Exception e){
+            wordLen = 5;
+        }
+        Game game = new Game(wordLen);
         game.startMessage();
         game.play();
     }
