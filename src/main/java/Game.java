@@ -75,7 +75,7 @@ public class Game {
 
     public void check(String guess){
         startGuess(guess);
-        System.out.println("Answer is : " + this.answer); //debugging
+        //System.out.println("Answer is : " + this.answer); //for debugging
         this.currentGuess = "";
         String answerCopy = ""; //copy answer but replace correct letters with _
         String[] guessArr = guess.split("");
