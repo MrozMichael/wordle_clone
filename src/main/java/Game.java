@@ -4,10 +4,7 @@ import java.io.File;
 import java.lang.reflect.Array;
 import java.util.*;
 public class Game {
-    //TO DO: fix minor logic error where yellow shows up multiple times.
-    // ^ex: guessing abaaa for answer xaxxx will result in !*!!!, should be !****
-    //first thought: while doing 2nd loop in check:
-    // ^mark first instance of ! then turn that letter into * in the answer arr so subsequent checks dont give !
+
     private int wordLength;
     private String answer;
     private int lives;
@@ -62,7 +59,7 @@ public class Game {
             String guessRemaining = this.lives == 1 ? "guess remaining" : "guesses remaining";
             System.out.println("Guess a word ("+lives+" "+guessRemaining+"):");
             String guess = inputScanner.nextLine().trim().toLowerCase();
-            while(guess.length() != wordLength || guess.contains(" ") || guess.contains("!") || guess.contains("_")){
+            while(guess.length() != wordLength || guess.contains(" ") || guess.contains("!") || guess.contains("_") || guess.contains("^")){
                 System.out.println("Guess must be " + wordLength +" letters without spaces");
                 guess = inputScanner.nextLine().trim().toLowerCase();
             }
@@ -83,6 +80,7 @@ public class Game {
         String answerCopy = ""; //copy answer but replace correct letters with _
         String[] guessArr = guess.split("");
         String[] answerArr = this.answer.split("");
+        //1st loop to replace correct guesses with _
         for (int i = 0; i < answerArr.length; i++){
             currentGuess += guessArr[i];
             answerCopy += guessArr[i].equals(answerArr[i]) ? "_" : answerArr[i];
@@ -96,7 +94,12 @@ public class Game {
             if (answerCopy.split("")[i].equals("_")){
                 continue;
             }
-            currentGuessArr[i] = answerCopy.contains(currentGuessArr[i]) ? "!" : "*";
+            if (answerCopy.contains(currentGuessArr[i])){
+                answerCopy = answerCopy.replaceFirst(currentGuessArr[i], "^");
+                currentGuessArr[i] = "!";
+            } else{
+                currentGuessArr[i] = "*";
+            }
         }
         currentGuess = String.join("", currentGuessArr);
         finishGuess(currentGuess);
@@ -137,7 +140,7 @@ public class Game {
                 "you want your word to have. An invalid input will default to a 5 letter word");
         Scanner wordLenScan = new Scanner(System.in);
         String input = wordLenScan.nextLine();
-        int wordLen = 5;
+        int wordLen;
         try{
            wordLen = Integer.valueOf(input);
             } catch (Exception e){
