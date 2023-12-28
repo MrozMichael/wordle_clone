@@ -1,9 +1,8 @@
 
 import java.io.FileNotFoundException;
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.*;
-public class Game {
+public class CLIGame {
 
     private int wordLength;
     private String answer;
@@ -14,7 +13,7 @@ public class Game {
     private String currentGuess;
     private ArrayList<String> guesses;
     private Scanner inputScanner;
-    public Game(int wordLength) {
+    public CLIGame(int wordLength) {
         if (wordLength > 7 || wordLength < 5){
             System.out.println("Word length must be between 5 and 7");
             return;
@@ -146,7 +145,7 @@ public class Game {
             } catch (Exception e){
             wordLen = 5;
         }
-        Game game = new Game(wordLen);
+        CLIGame game = new CLIGame(wordLen);
         game.startMessage();
         game.play();
     }

@@ -13,6 +13,7 @@ public class Wordle_UI extends Application {
     private double sceneHeight = 768;
     private Node[][] board;
     public static void main(String[] args) {
+        //GUIGame.main(args);
         launch(args);
     }
 
