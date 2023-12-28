@@ -5,6 +5,9 @@ import javafx.scene.control.Label;
 public class Node extends StackPane {
 
     private Rectangle rectangle;
+    private String name;
+
+    private Label label;
     public Node( String name, double x, double y, double width, double height) {
 
         // create rectangle
@@ -13,7 +16,8 @@ public class Node extends StackPane {
         rectangle.setFill(Color.WHITE);
 
         // create label
-        Label label = new Label( name);
+        this.name = name;
+        this.label = new Label( this.name);
 
         // set position
         setTranslateX( x);
@@ -36,5 +40,9 @@ public class Node extends StackPane {
                 rectangle.setFill(Color.GRAY);
                 break;
         }
+    }
+
+    public void changeName(String newName){
+        label.setText(newName);
     }
 }

@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
@@ -115,5 +116,15 @@ public class Wordle_UI extends Application {
         Scene gameScene = new Scene(mainRoot);
         configureGameWindow(stage);
         stage.setScene(gameScene);
+        GUIGame game = new GUIGame();
+        game.playGame(getBoard());
+    }
+
+    public Node[][] getBoard(){
+        return board;
+    }
+
+    public void setNode(Node node){
+
     }
 }

@@ -24,13 +24,13 @@ public class CLIGame {
         this.guesses = new ArrayList<>();
         this.inputScanner = new Scanner(System.in);
         try {
-            this.answer = getAnswer(wordLength).toLowerCase();
+            this.answer = getAnswer().toLowerCase();
         } catch(Exception e) {
             System.out.println("Error retrieving data, game closing.");
             return;
         }
     }
-    public String getAnswer(int wordLength) throws FileNotFoundException {
+    public String getAnswer() throws FileNotFoundException {
         String answer = "";
         try {
             File file = new File(wordLength+"letters.txt");
