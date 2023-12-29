@@ -2,7 +2,7 @@
 import java.io.FileNotFoundException;
 import java.io.File;
 import java.util.*;
-public class CLIGame {
+public class Wordle {
 
     private int wordLength;
     private String answer;
@@ -13,7 +13,7 @@ public class CLIGame {
     private String currentGuess;
     private ArrayList<String> guesses;
     private Scanner inputScanner;
-    public CLIGame(int wordLength) {
+    public Wordle(int wordLength) {
         if (wordLength > 7 || wordLength < 5){
             System.out.println("Word length must be between 5 and 7");
             return;
@@ -145,7 +145,7 @@ public class CLIGame {
             } catch (Exception e){
             wordLen = 5;
         }
-        CLIGame game = new CLIGame(wordLen);
+        Wordle game = new Wordle (wordLen);
         game.startMessage();
         game.play();
     }
